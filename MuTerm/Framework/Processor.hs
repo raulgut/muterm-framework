@@ -6,10 +6,10 @@
 -- Module      :  MuTerm.Framework.Processor
 -- Copyright   :  (c) muterm development team
 -- License     :  see LICENSE
--- 
+--
 -- Maintainer  :  rgutierrez@dsic.upv.es
 -- Stability   :  unstable
--- Portability :  non-portable 
+-- Portability :  non-portable
 --
 -- This module contains the processor definition.
 --
@@ -37,6 +37,6 @@ import MuTerm.Framework.Problem
 class Processor info tag o d | tag info o -> info d where
   apply       :: (MonadPlus mp, Info info o, Info info d) => tag -> o -> Proof info mp d
   applySearch :: (MonadPlus mp, Info info o, Info info d) => tag -> o -> [Proof info mp d]
-
+  
   apply       tag p = msum (applySearch tag p)
   applySearch tag p = [apply tag p]

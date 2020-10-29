@@ -4,10 +4,10 @@
 -- Module      :  MuTerm.Framework.Strategy
 -- Copyright   :  (c) muterm development team
 -- License     :  see LICENSE
--- 
+--
 -- Maintainer  :  rgutierrez@dsic.upv.es
 -- Stability   :  unstable
--- Portability :  non-portable 
+-- Portability :  non-portable
 --
 -- This module manage the different strategies to solve a termination
 -- problem

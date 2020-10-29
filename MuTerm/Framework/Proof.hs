@@ -13,10 +13,10 @@
 -- Module      :  MuTerm.Framework.Proof
 -- Copyright   :  (c) muterm development team
 -- License     :  see LICENSE
--- 
+--
 -- Maintainer  :  rgutierrez@dsic.upv.es
 -- Stability   :  unstable
--- Portability :  non-portable 
+-- Portability :  non-portable
 --
 -- This module contains the proof functor.
 --
@@ -160,13 +160,11 @@ instance (Monad m, Traversable m) => Traversable (ProofF info m) where
 
 -- MonadPlus
 
-instance MonadPlus m => MonadPlus (Free (ProofF info m)) where
-    mzero       = Impure (Search mzero)
-    mplus !p1 p2 = Impure (Search (mplus (return p1) (return p2)))
-
 instance MonadPlus m => Alternative (Free (ProofF info m)) where
    empty        = Impure (Search mzero)
    (!p1) <|> p2   = Impure (Search (mplus (return p1) (return p2)))
+
+instance MonadPlus m => MonadPlus (Free (ProofF info m))
 
 -- Show
 -----------------------------------------------------------------------------

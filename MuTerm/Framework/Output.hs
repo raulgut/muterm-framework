@@ -40,42 +40,43 @@ import MuTerm.Framework.Proof
 -- Text
 -- ----
 
-instance (Pretty a) => Pretty (ProofF PrettyInfo mp a) where pPrint = pprProofF
+
+instance  {-# OVERLAPPING #-} (Pretty a) => Pretty (ProofF PrettyInfo mp a) where pPrint = pprProofF
 instance (Pretty a, Pretty (SomeInfo info)) => Pretty (ProofF info mp a) where pPrint = pprProofF
 
 pprProofF = f where
       f Success{..} =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo $$
         text ("RESULT: Problem solved succesfully")
       f Refuted{..} =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo  $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo  $$
         text ("RESULT: Termination could be refuted.")
       f DontKnow{..} =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo  $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo  $$
         text ("RESULT: Don't know.")
 {-
       f (Or proc prob sub) =
         pPrint prob $$
-        text "PROCESSOR: " <> pPrint proc $$
+        text "PROCESSOR: " Doc.<> pPrint proc $$
         text ("Problem was translated to " ++ show (length sub) ++ " equivalent problems.") $$
         nest 8 (vcat $ punctuate (text "\n") $ map pPrint sub)
 -}
       f (And proc prob sub)
        | length sub > 1 =
         pPrint prob $$
-        text "PROCESSOR: " <> pPrint proc $$
+        text "PROCESSOR: " Doc.<> pPrint proc $$
         text ("Problem was divided in " ++ show (length sub) ++ " subproblems.") $$
         nest 8 (vcat $ punctuate (text "\n") $ map pPrint sub)
        | otherwise =
         pPrint prob $$
-        text "PROCESSOR: " <> pPrint proc $$
+        text "PROCESSOR: " Doc.<> pPrint proc $$
         nest 8 (vcat $ punctuate (text "\n") $ map pPrint sub)
       f (Single{..}) =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo $$
         nest 8 (pPrint subProblem)
       f (MAnd p1 p2) =
         text ("Problem was divided in 2 subproblems.") $$
@@ -87,36 +88,36 @@ pprProofF = f where
 pprProofFailures = foldFree (const Doc.empty) f . sliceProof where
       f Success{..} =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo $$
         text ("RESULT: Problem solved succesfully")
       f Refuted{..} =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo  $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo  $$
         text ("RESULT: Termination could be refuted.")
       f DontKnow{..} =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo  $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo  $$
         text ("RESULT: Don't know.")
 {-
       f (Or proc prob sub) =
         pPrint prob $$
-        text "PROCESSOR: " <> pPrint proc $$
+        text "PROCESSOR: " Doc.<> pPrint proc $$
         text ("Problem was translated to " ++ show (length sub) ++ " equivalent problems.") $$
         nest 8 (vcat $ punctuate (text "\n") $ map pPrint sub)
 -}
       f (And proc prob sub)
        | length sub > 1 =
         pPrint prob $$
-        text "PROCESSOR: " <> pPrint proc $$
+        text "PROCESSOR: " Doc.<> pPrint proc $$
         text ("Problem was divided in " ++ show (length sub) ++ " subproblems.") $$
         nest 8 (vcat $ punctuate (text "\n") $ sub)
        | otherwise =
         pPrint prob $$
-        text "PROCESSOR: " <> pPrint proc $$
+        text "PROCESSOR: " Doc.<> pPrint proc $$
         nest 8 (vcat $ punctuate (text "\n") $ sub)
       f (Single{..}) =
         pPrint problem $$
-        text "PROCESSOR: " <> pPrint procInfo $$
+        text "PROCESSOR: " Doc.<> pPrint procInfo $$
         nest 8 subProblem
       f (MAnd p1 p2) =
         text ("Problem was divided in 2 subproblems.") $$
@@ -143,7 +144,7 @@ instance HTML (SomeInfo HTMLInfo) where
 instance HTML Doc where toHtml = toHtml . show
 
 
-instance (Pretty a, Ord a, Monad m) => HTML (Proof HTMLInfo m a) where
+instance {-# OVERLAPPING #-} (Pretty a, Ord a, Monad m) => HTML (Proof HTMLInfo m a) where
   toHtml = toHtmlProof
 
 instance (Pretty a, Ord a, Monad m, HTML (SomeInfo info)) => HTML (Proof info m a) where
@@ -189,4 +190,3 @@ spani ident = H.thespan ! [H.theclass ident]
 divresult = spani "result" << "RESULT: "
 divyes    = divresult +++ spani "yes" << "YES. "
 divmaybe  = divresult +++ spani "maybe" << "Fail. "
-
