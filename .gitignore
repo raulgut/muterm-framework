@@ -8,3 +8,5 @@ wordpress-theme/
 *.*-boot
 *.*~
 *.DS_Store
+*.local
+dist-newstyle/

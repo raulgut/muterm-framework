@@ -1,0 +1,4 @@
+packages: *.cabal
+
+package trs
+  optimization: False
